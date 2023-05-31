@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: paymentservice
+ labels:
+    app: paymentservice
+spec:
+ selector:
+   matchLabels:
+     app: paymentservice
+ replicas: 3
+ strategy:
+   rollingUpdate:
+     maxSurge: 1
+     maxUnavailable: 1
+ template:
+    metadata:
+        labels:
+            app: paymentservice
+            version: rollout
+    spec:
+        containers:
+        - name: server
+          image: docker.io/efoshkinm/paymentservice:v0.0.2
+          env:
+          - name: PORT
+            value: "50051"
+          - name: DISABLE_PROFILER
+            value: "1"
