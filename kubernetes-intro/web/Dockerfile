@@ -7,7 +7,7 @@ COPY index.html homework.html /app
 COPY homework.conf /etc/nginx/conf.d
 WORKDIR /app
 
-EXPOSE 80
+EXPOSE 8000
 
 CMD ["-g", "daemon off;"]
 ENTRYPOINT ["nginx"]

@@ -5,29 +5,25 @@ metadata:
   labels: 
     app: web
 spec:
+  containers: 
+  - name: web
+    image: docker.io/efoshkinm/first-docker
+    volumeMounts:
+    - mountPath: /app
+      name: app
+    livenessProbe:
+      tcpSocket: { port: 8000 }
+    # readinessProbe:
+    #   httpGet:
+    #     path: index.html
+    #     port: 80
+  initContainers:
+  - name: init
+    image: busybox:1.31.1
+    command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
+    volumeMounts:
+    - name: app
+      mountPath: /app
   volumes:
   - name: app
     emptyDir: {}
-  containers: 
-    - name: web
-      image: thatsme/web:1.2
-      readinessProbe: 
-        httpGet: 
-          path: /index.html 
-          port: 80
-
-  # - name: web
-  #   image: docker.io/efoshkinm/first-docker
-  #   readinessProbe:
-  #     httpGet: 
-  #       path: /index.html
-  #       port: 80
-  #   volumeMounts:
-  #   - name: app
-  #     mountPath: /app
-  # - name: init
-  #   image: busybox:1.36.1
-  #   command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
-  #   volumeMounts:
-  #   - name: app
-  #     mountPath: /app
