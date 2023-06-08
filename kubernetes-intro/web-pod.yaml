@@ -12,11 +12,12 @@ spec:
     - mountPath: /app
       name: app
     livenessProbe:
-      tcpSocket: { port: 8000 }
-    # readinessProbe:
-    #   httpGet:
-    #     path: index.html
-    #     port: 80
+      tcpSocket: 
+        port: 8000 
+    readinessProbe:
+      httpGet:
+        path: /index.html
+        port: 8000
   initContainers:
   - name: init
     image: busybox:1.31.1
