@@ -1,0 +1,66 @@
+ll
+mkdir OTUS
+ll
+cd OTUS/
+ll
+git clone git@github.com:otus-kuber-2023-04/efoshkinm_platform.git
+cd efoshkinm_platform/
+mkdir kubernetes-volumes
+cd kubernetes-volumes/
+touch README.md
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+sudo yum install -y kubectl
+kubectl cluster-info
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+echo 'alias kk=kubectl' >>~/.bashrc
+echo 'complete -o default -F __start_kubectl kk' >>~/.bashrc
+kk get no
+source ~/.bashrc
+kk get no
+# For AMD64 / x86_64
+[ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.19.0/kind-linux-amd64
+# For ARM64
+[ $(uname -m) = aarch64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.19.0/kind-linux-arm64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+kind create cluster
+export KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
+vi minio-statefulset.yaml 
+kk get no
+kk apply -f minio-statefulset.yaml 
+kk get po
+kk get pv
+vi minio-headless-service.yaml
+kk apply -f minio-headless-service.yaml 
+kk get svc
+kk get sts
+kk get pvc
+kk get pv
+kk describe sts minio 
+kk describe pv pvc-0cb125d0-7d94-403c-b93a-831d1bd9edc5 
+kk describe pvc data-minio-0 
+kk describe po minio-0 
+vi minio-secrets.yaml
+kk apply -f minio-secrets.yaml 
+kk get secrets minion-secrets 
+kk describe secrets minion-secrets 
+kk get secret
+kk describe secrets minion-secrets 
+kk get sts
+kk describe sts minio 
+kk apply -f minio-statefulset.yaml 
+kk describe sts minio 
+kk get po
+kk exec -it minio-0 -- bash
+kk exec -it minio-0 -- sh
+history
+history --help
+history -a history
