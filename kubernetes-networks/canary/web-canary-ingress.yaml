@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-canary
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/canary: "true"
+    #nginx.ingress.kubernetes.io/canary-by-header: "canary"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
+
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /web
+          pathType: Prefix 
+          backend:
+            service: 
+              name: web-canary-svc-cip
+              port: 
+                number: 8000

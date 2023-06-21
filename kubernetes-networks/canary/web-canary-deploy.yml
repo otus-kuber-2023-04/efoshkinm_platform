@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-canary
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      app: web-canary
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 70%
+      maxSurge: 100%
+  template: 
+    metadata:
+      name: web-canary
+      labels: 
+        app: web-canary
+    spec:
+      containers: 
+      - name: web
+        image: docker.io/efoshkinm/first-docker
+        volumeMounts:
+        - mountPath: /app
+          name: app
+        livenessProbe:
+          tcpSocket: 
+            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8000
+      initContainers:
+      - name: init
+        image: busybox:1.31.1
+        command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      volumes:
+      - name: app
+        emptyDir: {}
