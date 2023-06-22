@@ -7,7 +7,8 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: jane
-  apiGroup: rbac.authorization.k8s.io
+  apiGroup: ""
+  namespace: dev
 roleRef:
   kind: Role
   name: jane-role
