@@ -6,7 +6,8 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: dave
-  apiGroup: rbac.authorization.k8s.io
+  apiGroup: ""
+  namespace: default
 roleRef:
   kind: Role
   name: dave-role
