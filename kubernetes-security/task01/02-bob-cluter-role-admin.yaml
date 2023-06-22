@@ -6,7 +6,7 @@ metadata:
   labels: 
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
-- apiGroups: [""]
+- apiGroups: ["*"]
   resources: ["*"]
   verbs: ["*"]
 
